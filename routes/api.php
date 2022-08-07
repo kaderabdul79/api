@@ -17,7 +17,7 @@ Route::delete('/categories/{id}',[CategoryController::class,'deleteCategoryById'
 
 // courses
 Route::get('/courses',[CourseController::class,'getAllCourses']);
-Route::post('/courses/create',[CourseController::class,'createCourse']);
+Route::post('/courses/create',[CourseController::class,'storeCourse']);
 Route::get('/courses/{id}',[CourseController::class,'getCourseById']);
 Route::delete('/courses/{id}',[CourseController::class,'deleteCourseById']);
 

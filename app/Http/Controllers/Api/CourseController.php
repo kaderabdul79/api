@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
-    public function createCourse(Request $request){
+    public function storeCourse(Request $request){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
             'slug' => 'required',
@@ -22,10 +22,7 @@ class CourseController extends Controller
         ]);
 
         if($rules->fails()){
-            return response()->json([
-                'status'=>400,
-                'errors'=>$rules->messages()
-            ]);
+            return send_error('Validation Error',$rules->messages(),$code = 422);
         }
 
         try{
@@ -38,18 +35,10 @@ class CourseController extends Controller
                 'price' => $request->price,
             ]);
 
-            return response()->json([
-                'status' => true,
-                'message' => "succesfully Inserted!",
-                'data' => $course
-            ]);
+            return send_response("succesfully Inserted!",$course);
 
         }catch(Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => "failed to Insert!",
-                'errors' => $e->getMessage()
-            ]);
+            return send_error($e->getMessage(),$e->getCode());
         }
     }
 
