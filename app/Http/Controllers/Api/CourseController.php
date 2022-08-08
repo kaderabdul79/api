@@ -42,31 +42,30 @@ class CourseController extends Controller
         }
     }
 
-    // getAllCategories list
+    // getAllCourse list
     public function getAllCourses(){
         $courses = Course::all()->load('category');
-        return response()->json([
-            'status' => true,
-            'courses' => $courses
-        ]);
+        return send_response("fetch all courses data!",$courses);
     }
 
-    // getCategoriesById for a single category
+    // getCourseById for a single Course
     public function getCourseById(Request $request){
-        $course = Course::findOrFail($request->id)->load('category');
-        return response()->json([
-            'status' => true,
-            'course' => $course
-        ]);
+        try{
+            $course = Course::findOrFail($request->id)->load('category');
+            return send_response("fetch course data!",$course);
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
     }
 
-    // deleteCategoryById
+    // deleteCourseById
     public function deleteCourseById(Request $request){
-        $course = Course::findOrFail($request->id);
-        $course->delete();
-        return response()->json([
-            'status' => true,
-            'message' => 'deleted'
-        ]);
+        try{
+            $course = Course::findOrFail($request->id);
+            $course->delete();
+            return send_response("Successfull Deleted!");
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
     }
 }
