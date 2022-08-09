@@ -20,6 +20,9 @@ Route::get('/courses',[CourseController::class,'getAllCourses']);
 Route::post('/courses/create',[CourseController::class,'storeCourse']);
 Route::get('/courses/{id}',[CourseController::class,'getCourseById']);
 Route::delete('/courses/{id}',[CourseController::class,'deleteCourseById']);
+Route::get('/courses/{id}/edit',[CourseController::class,'editCourseById']);
+Route::put('/courses/{id}',[CourseController::class,'updateCourseById']);
+
 
 // Route::get('see',function(){
 //     // $course = Course::with('categories')->all();
