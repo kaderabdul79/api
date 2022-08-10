@@ -2,36 +2,42 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
     
-    // getAllCategories list
+    // get All Categories list
     public function getAllCategories(){
-        $categories = Category::all();
-        return response()->json([
-            'categories' => $categories
-        ]);
+        try{
+            $categories = Category::all()->load('courses');
+            return send_response("fetch all categories!",$categories);
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
     }
 
-    // getCategoriesById for a single category
-    public function getCategoryById(Request $request){
-        $category = Category::findOrFail($request->id);
-        return response()->json([
-            'category' => $category
-        ]);
+    // get Categories By Id for a single category
+    public function getCategoryById($id){
+        try{
+            $category = Category::findOrFail($id);
+            return send_response("fetch category data!",$category);
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
     }
 
-    // deleteCategoryById
-    public function deleteCategoryById(Request $request){
-        $category = Category::findOrFail($request->id);
-        $category->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'deleted'
-        ]);
+    // delete Category By Id
+    public function deleteCategoryById($id){
+        try{
+            $category = Category::findOrFail($id);
+            $category->delete();
+            return send_response("Successfull Deleted!");
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
     }
 }

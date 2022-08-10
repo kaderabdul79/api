@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
+    
+    // get All Course list
+    public function getAllCourses(){
+        try{
+            $courses = Course::all()->load('category');
+            return send_response("fetch all courses data!",$courses);
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
+    }
+    
+    // insert course data
     public function storeCourse(Request $request){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
@@ -42,16 +54,10 @@ class CourseController extends Controller
         }
     }
 
-    // getAllCourse list
-    public function getAllCourses(){
-        $courses = Course::all()->load('category');
-        return send_response("fetch all courses data!",$courses);
-    }
-
     // getCourseById for a single Course
-    public function getCourseById(Request $request){
+    public function getCourseById($id){
         try{
-            $course = Course::findOrFail($request->id)->load('category');
+            $course = Course::findOrFail($id)->load('category');
             return send_response("fetch course data!",$course);
         }catch(Exception $e){
             return send_error('No Data Found!',$e->getCode());
@@ -102,9 +108,9 @@ class CourseController extends Controller
     }
 
     // deleteCourseById
-    public function deleteCourseById(Request $request){
+    public function deleteCourseById($id){
         try{
-            $course = Course::findOrFail($request->id);
+            $course = Course::findOrFail($id);
             $course->delete();
             return send_response("Successfull Deleted!");
         }catch(Exception $e){
