@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -18,9 +20,36 @@ class CategoryController extends Controller
         }catch(Exception $e){
             return send_error('No Data Found!',$e->getCode());
         }
+    }    
+
+    // insert category data
+    public function storeCategory(Request $request){
+        $rules = Validator::make($request->all(),[
+            'name' => 'required',
+            'slug' => 'required',
+            'status' => 'required'
+        ]);
+
+        if($rules->fails()){
+            return send_error('Validation Error',$rules->messages(),$code = 422);
+        }
+
+        try{
+            $category = Category::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'description' => $request->description,
+                'status' => $request->status,
+            ]);
+
+            return send_response("Succesfully Inserted!",$category);
+
+        }catch(Exception $e){
+            return send_error($e->getMessage(),$e->getCode());
+        }
     }
 
-    // get Categories By Id for a single category
+    // get category By Id for a single category
     public function getCategoryById($id){
         try{
             $category = Category::findOrFail($id);
@@ -30,7 +59,44 @@ class CategoryController extends Controller
         }
     }
 
-    // delete Category By Id
+    // edit category By Id for a single category
+    public function editCategoryById($id){
+        try{
+            $category = Category::findOrFail($id);
+            return send_response("fetch category data!",$category);
+        }catch(Exception $e){
+            return send_error('No Data Found!',$e->getCode());
+        }
+    }
+    
+        // update category By Id for a single category
+    public function updateCategoryById(Request $request,$id){
+        $rules = Validator::make($request->all(),[
+            'name' => 'required',
+            'slug' => 'required',
+            'status' => 'required',
+        ]);
+    
+        if($rules->fails()){
+                return send_error('Validation Error',$rules->messages(),$code = 422);
+        }
+    
+        try{
+            $category = Category::findOrFail($id);
+            $category->name = $request->name;
+            $category->slug = Str::slug($request->slug);
+            $category->status = $request->status;
+            $category->save();
+    
+            return send_response("succesfully updated!",$category);
+    
+        }catch(Exception $e){
+            return send_error($e->getMessage(),$e->getCode());
+        }
+    }
+
+    
+        // delete Category By Id
     public function deleteCategoryById($id){
         try{
             $category = Category::findOrFail($id);

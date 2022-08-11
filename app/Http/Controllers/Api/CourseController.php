@@ -54,7 +54,7 @@ class CourseController extends Controller
         }
     }
 
-    // getCourseById for a single Course
+    // get Course By Id for a single Course
     public function getCourseById($id){
         try{
             $course = Course::findOrFail($id)->load('category');
@@ -64,7 +64,7 @@ class CourseController extends Controller
         }
     }
 
-    // getCourseById for a single Course
+    // edit Course ById for a single Course
     public function editCourseById($id){
         try{
             $course = Course::findOrFail($id)->load('category');
@@ -74,7 +74,7 @@ class CourseController extends Controller
         }
     }
 
-    // updateCourseById for a single Course
+    // update Course By Id for a single Course
     public function updateCourseById(Request $request,$id){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
@@ -107,7 +107,7 @@ class CourseController extends Controller
         }
     }
 
-    // deleteCourseById
+    // delete Course By Id
     public function deleteCourseById($id){
         try{
             $course = Course::findOrFail($id);
