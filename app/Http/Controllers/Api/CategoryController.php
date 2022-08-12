@@ -26,7 +26,6 @@ class CategoryController extends Controller
     public function storeCategory(Request $request){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
-            'slug' => 'required',
             'status' => 'required'
         ]);
 
@@ -60,14 +59,14 @@ class CategoryController extends Controller
     }
 
     // edit category By Id for a single category
-    public function editCategoryById($id){
-        try{
-            $category = Category::findOrFail($id);
-            return send_response("fetch category data!",$category);
-        }catch(Exception $e){
-            return send_error('No Data Found!',$e->getCode());
-        }
-    }
+    // public function editCategoryById($id){
+    //     try{
+    //         $category = Category::findOrFail($id);
+    //         return send_response("fetch category data!",$category);
+    //     }catch(Exception $e){
+    //         return send_error('No Data Found!',$e->getCode());
+    //     }
+    // }
     
         // update category By Id for a single category
     public function updateCategoryById(Request $request,$id){
@@ -84,9 +83,10 @@ class CategoryController extends Controller
         try{
             $category = Category::findOrFail($id);
             $category->name = $request->name;
-            $category->slug = Str::slug($request->slug);
+            $category->slug = Str::slug($request->name);
             $category->status = $request->status;
-            $category->save();
+            $category->description = $request->description;
+            $category->update();
     
             return send_response("succesfully updated!",$category);
     

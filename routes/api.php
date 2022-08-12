@@ -13,16 +13,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/categories',[CategoryController::class,'getAllCategories']);
 Route::post('/categories/create',[CategoryController::class,'storeCategory']);
 Route::get('/categories/{id}',[CategoryController::class,'getCategoryById']);
-Route::get('/categories/{id}/edit',[CategoryController::class,'editCategoryById']);
-Route::put('/categories/{id}',[CategoryController::class,'updateCategoryById']);
+// Route::get('/categories/{id}/edit',[CategoryController::class,'editCategoryById']);
+Route::put('/categories/{id}/update',[CategoryController::class,'updateCategoryById']);
 Route::delete('/categories/{id}',[CategoryController::class,'deleteCategoryById']);
 
 // courses
 Route::get('/courses',[CourseController::class,'getAllCourses']);
 Route::post('/courses/create',[CourseController::class,'storeCourse']);
 Route::get('/courses/{id}',[CourseController::class,'getCourseById']);
-Route::get('/courses/{id}/edit',[CourseController::class,'editCourseById']);
-Route::put('/courses/{id}',[CourseController::class,'updateCourseById']);
+// Route::get('/courses/{id}/edit',[CourseController::class,'editCourseById']);
+Route::put('/courses/{id}/update',[CourseController::class,'updateCourseById']);
 Route::delete('/courses/{id}',[CourseController::class,'deleteCourseById']);
 
 

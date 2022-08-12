@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use App\Models\Course;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -25,10 +26,8 @@ class CourseController extends Controller
     public function storeCourse(Request $request){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
-            'slug' => 'required',
             'code' => 'required',
             'category_id' => 'required',
-            'description' => 'required',
             'status' => 'required',
             'price' => 'required',
         ]);
@@ -45,8 +44,9 @@ class CourseController extends Controller
                 'description' => $request->description,
                 'status' => $request->status,
                 'price' => $request->price,
+                'slug' => Str::slug($request->name)
             ]);
-
+            
             return send_response("succesfully Inserted!",$course);
 
         }catch(Exception $e){
@@ -65,20 +65,19 @@ class CourseController extends Controller
     }
 
     // edit Course ById for a single Course
-    public function editCourseById($id){
-        try{
-            $course = Course::findOrFail($id)->load('category');
-            return send_response("fetch course data!",$course);
-        }catch(Exception $e){
-            return send_error('No Data Found!',$e->getCode());
-        }
-    }
+    // public function editCourseById($id){
+    //     try{
+    //         $course = Course::findOrFail($id)->load('category');
+    //         return send_response("fetch course data!",$course);
+    //     }catch(Exception $e){
+    //         return send_error('No Data Found!',$e->getCode());
+    //     }
+    // }
 
     // update Course By Id for a single Course
     public function updateCourseById(Request $request,$id){
         $rules = Validator::make($request->all(),[
             'name' => 'required',
-            'slug' => 'required',
             'code' => 'required',
             'category_id' => 'required',
             'description' => 'required',
@@ -98,8 +97,9 @@ class CourseController extends Controller
             $course->description = $request->description;
             $course->status = $request->status;
             $course->price = $request->price;
-            $course->save();
-
+            $course->slug = Str::slug($request->name);
+            $course->update();
+// return $request;
             return send_response("succesfully updated!",$course);
 
         }catch(Exception $e){

@@ -20,6 +20,7 @@ class CourseFactory extends Factory
         return [
             'category_id' => Category::factory()->create(),
             'name' => $this->faker->name(),
+            'slug' => $this->faker->slug(),
             'description' => $this->faker->sentence(10),
             'code' => $this->faker->randomDigit(),
             'image' => $this->faker->imageUrl($width = 640, $height = 480),
